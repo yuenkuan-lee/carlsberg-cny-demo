@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carlsberg CNY 2026 - Parallax Hills</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        body {
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .parallax-container {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hill-layer {
+            position: absolute;
+            width: 200%;
+            height: auto;
+            left: 0;
+            transform-origin: bottom left;
+        }
+        
+        .background-texture {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-900">
+    <div class="parallax-container">
+        <!-- Background Texture -->
+        <img src="assets/background-texture.png" alt="Background Texture" class="background-texture">
+        
+        <!-- Hill Layers -->
+        <img src="assets/hill-midground-2.png" alt="Hill Midground 2" class="hill-layer hill-midground-2 z-10 scale-[1.5] sm:scale-[1.8] md:scale-[2.0] lg:scale-[2.0] xl:scale-[2.0] bottom-[15%] sm:bottom-[12%] md:bottom-[10%] lg:bottom-[8%] xl:bottom-[5%]">
+        <img src="assets/hill-midground-1.png" alt="Hill Midground 1" class="hill-layer hill-midground-1 z-20 scale-[1.8] sm:scale-[2.0] md:scale-[2.2] lg:scale-[2.2] xl:scale-[2.2] bottom-[8%] sm:bottom-[8%] md:bottom-[0%] lg:-bottom-[3%] xl:-bottom-[5%]">
+        <img src="assets/hill-foreground.png" alt="Hill Foreground" class="hill-layer hill-foreground z-30 scale-[2.0] sm:scale-[2.2] md:scale-[2.4] lg:scale-[2.5] xl:scale-[2.5] bottom-[0%] sm:-bottom-[5%] md:-bottom-[10%] lg:-bottom-[15%] xl:-bottom-[20%]">
+    </div>
+
+    <script>
+        // Custom scroll tracking for parallax effect
+        let scrollProgress = 0;
+        const maxScroll = 1000; // Maximum scroll distance (increased for longer scroll)
+        
+        // Track scroll wheel events
+        document.addEventListener('wheel', (e) => {
+            e.preventDefault(); // Prevent default scrolling
+            
+            // Update scroll progress
+            scrollProgress += e.deltaY * 0.5;
+            scrollProgress = Math.max(0, Math.min(maxScroll, scrollProgress));
+            
+            // Calculate progress percentage
+            const progress = scrollProgress / maxScroll;
+            
+            // Animate hills based on scroll progress
+            gsap.to(".hill-foreground", {
+                x: `-${100 * progress}%`,
+                duration: 0.1,
+                ease: "none"
+            });
+            
+            gsap.to(".hill-midground-1", {
+                x: `-${60 * progress}%`,
+                duration: 0.1,
+                ease: "none"
+            });
+            
+            gsap.to(".hill-midground-2", {
+                x: `-${30 * progress}%`,
+                duration: 0.1,
+                ease: "none"
+            });
+            
+            // Optional: Add some subtle background movement
+            gsap.to(".background-texture", {
+                y: `-${20 * progress}%`,
+                duration: 0.1,
+                ease: "none"
+            });
+        });
+        
+        // Prevent touch scrolling on mobile
+        document.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        }, { passive: false });
+    </script>
+</body>
+</html>
