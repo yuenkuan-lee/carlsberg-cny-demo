@@ -45,9 +45,14 @@
         <img src="assets/background-texture.png" alt="Background Texture" class="background-texture">
         
         <!-- Hill Layers -->
+        <!-- Clouds (above hills) -->
+        <img src="assets/cloud-ornament-left.png" alt="Cloud Left" class="absolute top-[8%] -left-[5%] w-[28vw] sm:w-[24vw] md:w-[22vw] lg:w-[20vw] xl:w-[18vw] z-40 cloud-left pointer-events-none">
+        <img src="assets/floating-cloud.png" alt="Floating Cloud" class="absolute top-[40%] left-1/2 -translate-x-1/2 w-[22vw] sm:w-[20vw] md:w-[18vw] lg:w-[16vw] xl:w-[14vw] z-40 cloud-floating pointer-events-none">
+        <img src="assets/cloud-ornament-right.png" alt="Cloud Right" class="absolute top-[12%] -right-[5%] w-[30vw] sm:w-[26vw] md:w-[24vw] lg:w-[22vw] xl:w-[20vw] z-40 cloud-right pointer-events-none">
+
         <img src="assets/hill-midground-2.png" alt="Hill Midground 2" class="hill-layer hill-midground-2 z-10 scale-[1.5] sm:scale-[1.8] md:scale-[2.0] lg:scale-[2.0] xl:scale-[2.0] bottom-[15%] sm:bottom-[12%] md:bottom-[10%] lg:bottom-[8%] xl:bottom-[5%]">
-        <img src="assets/hill-midground-1.png" alt="Hill Midground 1" class="hill-layer hill-midground-1 z-20 scale-[1.8] sm:scale-[2.0] md:scale-[2.2] lg:scale-[2.2] xl:scale-[2.2] bottom-[8%] sm:bottom-[8%] md:bottom-[0%] lg:-bottom-[3%] xl:-bottom-[5%]">
-        <img src="assets/hill-foreground.png" alt="Hill Foreground" class="hill-layer hill-foreground z-30 scale-[2.0] sm:scale-[2.2] md:scale-[2.4] lg:scale-[2.5] xl:scale-[2.5] bottom-[0%] sm:-bottom-[5%] md:-bottom-[10%] lg:-bottom-[15%] xl:-bottom-[20%]">
+        <img src="assets/hill-midground-1.png" alt="Hill Midground 1" class="hill-layer hill-midground-1 z-20 scale-[1.8] sm:scale-[2.0] md:scale-[2.2] lg:scale-[2.2] xl:scale-[2.2] bottom-[8%] sm:bottom-[8%] md:bottom-[0%] lg:-bottom-[3%] xl:-bottom-[15%]">
+        <img src="assets/hill-foreground.png" alt="Hill Foreground" class="hill-layer hill-foreground z-30 scale-[2.0] sm:scale-[2.2] md:scale-[2.4] lg:scale-[2.5] xl:scale-[2.5] bottom-[0%] sm:-bottom-[5%] md:-bottom-[10%] lg:-bottom-[15%] xl:-bottom-[40%]">
     </div>
 
     <script>
@@ -81,6 +86,23 @@
             
             gsap.to(".hill-midground-2", {
                 x: `-${30 * progress}%`,
+                duration: 0.1,
+                ease: "none"
+            });
+
+            // Animate clouds (slightly different speeds for depth)
+            gsap.to(".cloud-left", {
+                x: `-${60 * progress}%`,
+                duration: 0.1,
+                ease: "none"
+            });
+            gsap.to(".cloud-floating", {
+                x: `-${100 * progress}%`,
+                duration: 0.1,
+                ease: "none"
+            });
+            gsap.to(".cloud-right", {
+                x: `-${60 * progress}%`,
                 duration: 0.1,
                 ease: "none"
             });
