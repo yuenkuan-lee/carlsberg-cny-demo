@@ -43,21 +43,26 @@
 
         /* Headline styles to match provided artwork */
         .headline-cn {
+            position: relative;
             font-weight: 900;
             line-height: 1;
-            color: #ffffff; /* warm white */
-            -webkit-text-stroke: 3px #e0b96b; /* gold outline */
+            color: #ffffff;
+            -webkit-text-stroke: 3px #e0b96b;
             text-stroke: 3px #e0b96b;
-            /* layered shadows to simulate red extrude and green rim */
+            display: inline-block;
+            transform: scaleX(0.88) skewX(-7deg);
+            transform-origin: center bottom;
             text-shadow:
                 0 0 0 #ffffff,
                 1px 1px 0 #c6372b,
                 2px 2px 0 #c6372b,
                 3px 3px 0 #c6372b,
-                0 0 0 #1f6a3b,
+                4px 4px 0 #c6372b,
+                8px 8px 0 #c6372b,
                 -1px 1px 0 #1f6a3b,
-                -2px 2px 0 #1f6a3b,
-                0 6px 12px rgba(0,0,0,0.25);
+                12px 12px 0 #1f6a3b,
+                6px 8px 12px rgba(0,0,0,0.35),
+                10px 14px 18px rgba(0,0,0,0.25);
         }
 
         .headline-en {
@@ -66,6 +71,61 @@
             color: #1f6a3b; /* Carlsberg green */
             text-transform: uppercase;
             text-shadow: 0 3px 8px rgba(0,0,0,0.25);
+        }
+
+        /* Shiny text overlay (keeps original fill/stroke; shimmer sits above text) */
+        .headline-cn, .headline-en { position: relative; }
+        .headline-en::after {
+            content: attr(data-text);
+            position: absolute;
+            inset: 0;
+            color: transparent; /* ensure only gradient shows */
+            background: linear-gradient(75deg,
+                rgba(255,255,255,0) 0%,
+                rgba(255,255,255,0) 40%,
+                rgba(255,255,255,0.95) 50%,
+                rgba(255,255,255,0) 60%,
+                rgba(255,255,255,0) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            pointer-events: none;
+            mix-blend-mode: screen; /* brighten over base text */
+            background-size: 220% 120%;
+            animation: shiny-sweep 2.6s linear infinite;
+        }
+
+        .headline-cn::before {
+            content: attr(data-text);
+            position: absolute;
+            inset: 0;
+            color: #fff;
+            text-shadow:
+                1px 1px 0 #c6372b,
+                2px 2px 0 #c6372b,
+                3px 3px 0 #c6372b,
+                4px 4px 0 #c6372b,
+                8px 8px 0 #c6372b,
+                -1px 1px 0 #1f6a3b,
+                12px 12px 0 #1f6a3b;
+            filter: brightness(1);
+            animation: glow-sync 2.6s linear infinite;
+            mix-blend-mode: screen; /* 让它叠加变亮 */
+        }
+
+        @keyframes glow-sync {
+            0% { 
+                filter: brightness(1);
+            }
+            50% { 
+                filter: brightness(2);
+            }
+            100% { 
+                filter: brightness(1);
+            }
+        }
+
+        @keyframes shiny-sweep {
+            0% { background-position: 120% 0; }
         }
     </style>
 </head>
@@ -90,8 +150,8 @@
         <!-- Center Headline (moves left on scroll) -->
         <div class="absolute inset-0 z-50 pointer-events-none headline-wrap flex items-start justify-center pt-[30vh] md:pt-[20vh] lg:pt-[14vh] xl:pt-[6vh]">
             <div class="text-center">
-                <div class="headline-cn select-none text-6xl sm:text-7xl md:text-8xl lg:text-8xl xl:text-[114px]">嘉士伯 一起發</div>
-                <div class="headline-en mt-2 select-none tracking-widest text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl">BREWING PROSPERITY TOGETHER</div>
+                <div class="headline-cn select-none text-6xl sm:text-7xl md:text-8xl lg:text-8xl xl:text-[114px]" data-text="嘉士伯 一起發">嘉士伯 一起發</div>
+                <div class="headline-en mt-2 select-none tracking-widest text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl" data-text="BREWING PROSPERITY TOGETHER">BREWING PROSPERITY TOGETHER</div>
             </div>
         </div>
     </div>
@@ -107,7 +167,7 @@
             e.preventDefault(); // Prevent default scrolling
             hasScrolled = true;
             // Update scroll progress
-            scrollProgress += e.deltaY * 0.5;
+            scrollProgress += e.deltaY * 0.2;
             scrollProgress = Math.max(0, Math.min(maxScroll, scrollProgress));
             
             // Calculate progress percentage
@@ -173,7 +233,7 @@
 
             // Move headline left like clouds (slightly slower than foreground)
             gsap.to('.headline-wrap', {
-                x: `-${55 * progress}%`,
+                x: `-${100 * progress}%`,
                 duration: 0.1,
                 ease: 'none'
             });
