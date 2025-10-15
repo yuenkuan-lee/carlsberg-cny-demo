@@ -167,7 +167,7 @@
             e.preventDefault(); // Prevent default scrolling
             hasScrolled = true;
             // Update scroll progress
-            scrollProgress += e.deltaY * 0.2;
+            scrollProgress += e.deltaY * 0.5;
             scrollProgress = Math.max(0, Math.min(maxScroll, scrollProgress));
             
             // Calculate progress percentage
